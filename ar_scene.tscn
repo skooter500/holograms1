@@ -1,0 +1,69 @@
+[gd_scene load_steps=10 format=3 uid="uid://c3c7a060briff"]
+
+[ext_resource type="PackedScene" uid="uid://d3xsflu60c3ml" path="res://gatchaman__phoenix/scene.gltf" id="1_ya8t7"]
+[ext_resource type="Script" path="res://detector.gd" id="2_y8688"]
+
+[sub_resource type="Environment" id="Environment_w5w2x"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_oa5od"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_iy5vj"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_b3ho8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ymypt"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_o4dns"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3djd"]
+albedo_color = Color(0.839304, 0.736103, 0.839421, 1)
+
+[node name="root" type="Node3D"]
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_ya8t7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_w5w2x")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.778769, 0.336232, 0.529592, -0.627311, 0.417411, 0.657456, 0, -0.844225, 0.535989, 0, 0, 0)
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+
+[node name="left" type="XRController3D" parent="XROrigin3D"]
+tracker = &"left_hand"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/left"]
+mesh = SubResource("BoxMesh_oa5od")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="XROrigin3D/left"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/left/StaticBody3D"]
+shape = SubResource("SphereShape3D_iy5vj")
+
+[node name="right" type="XRController3D" parent="XROrigin3D"]
+tracker = &"right_hand"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/right"]
+mesh = SubResource("BoxMesh_b3ho8")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="XROrigin3D/right"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/right/StaticBody3D"]
+shape = SubResource("SphereShape3D_iy5vj")
+
+[node name="detector" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.53178, 5.93879, 0)
+script = ExtResource("2_y8688")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="detector"]
+shape = SubResource("BoxShape3D_ymypt")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="detector/CollisionShape3D"]
+mesh = SubResource("BoxMesh_o4dns")
+surface_material_override/0 = SubResource("StandardMaterial3D_t3djd")
+
+[connection signal="body_entered" from="detector" to="detector" method="_on_body_entered"]
