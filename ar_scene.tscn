@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://c3c7a060briff"]
+[gd_scene load_steps=12 format=3 uid="uid://c3c7a060briff"]
 
+[ext_resource type="Script" path="res://root.gd" id="1_i35q7"]
 [ext_resource type="PackedScene" uid="uid://d3xsflu60c3ml" path="res://gatchaman__phoenix/scene.gltf" id="1_ya8t7"]
 [ext_resource type="Script" path="res://detector.gd" id="2_y8688"]
 
@@ -18,10 +19,14 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3djd"]
 albedo_color = Color(0.839304, 0.736103, 0.839421, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dho4n"]
+albedo_color = Color(0.113725, 1, 1, 1)
+
 [node name="root" type="Node3D"]
+script = ExtResource("1_i35q7")
 
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("1_ya8t7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_w5w2x")
@@ -37,6 +42,7 @@ transform = Transform3D(0.778769, 0.336232, 0.529592, -0.627311, 0.417411, 0.657
 tracker = &"left_hand"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/left"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 mesh = SubResource("BoxMesh_oa5od")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="XROrigin3D/left"]
@@ -48,6 +54,7 @@ shape = SubResource("SphereShape3D_iy5vj")
 tracker = &"right_hand"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/right"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 mesh = SubResource("BoxMesh_b3ho8")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="XROrigin3D/right"]
@@ -65,5 +72,10 @@ shape = SubResource("BoxShape3D_ymypt")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="detector/CollisionShape3D"]
 mesh = SubResource("BoxMesh_o4dns")
 surface_material_override/0 = SubResource("StandardMaterial3D_t3djd")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.36687, 0)
+material_override = SubResource("StandardMaterial3D_dho4n")
+size = Vector3(100, 0.1, 100)
 
 [connection signal="body_entered" from="detector" to="detector" method="_on_body_entered"]
