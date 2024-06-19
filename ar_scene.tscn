@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://c3c7a060briff"]
+[gd_scene load_steps=14 format=3 uid="uid://c3c7a060briff"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_i35q7"]
 [ext_resource type="PackedScene" uid="uid://d3xsflu60c3ml" path="res://gatchaman__phoenix/scene.gltf" id="1_ya8t7"]
+[ext_resource type="Script" path="res://Rotate.gd" id="2_0bq3u"]
 [ext_resource type="Script" path="res://detector.gd" id="2_y8688"]
 
 [sub_resource type="Environment" id="Environment_w5w2x"]
@@ -19,24 +20,37 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3djd"]
 albedo_color = Color(0.839304, 0.736103, 0.839421, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dho4n"]
-albedo_color = Color(0.113725, 1, 1, 1)
+[sub_resource type="PlaneMesh" id="PlaneMesh_djo5j"]
+size = Vector2(10, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3dee4"]
+transparency = 1
 
 [node name="root" type="Node3D"]
 script = ExtResource("1_i35q7")
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_ya8t7")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1)
+script = ExtResource("2_0bq3u")
+speed = -0.5
+
+[node name="Sketchfab_Scene" parent="Node3D" instance=ExtResource("1_ya8t7")]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0.585078)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_w5w2x")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.778769, 0.336232, 0.529592, -0.627311, 0.417411, 0.657456, 0, -0.844225, 0.535989, 0, 0, 0)
+shadow_enabled = true
+shadow_bias = 2.423
+shadow_blur = 10.0
+directional_shadow_mode = 0
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03609, 0, 1.86497)
 
 [node name="left" type="XRController3D" parent="XROrigin3D"]
 tracker = &"left_hand"
@@ -73,9 +87,8 @@ shape = SubResource("BoxShape3D_ymypt")
 mesh = SubResource("BoxMesh_o4dns")
 surface_material_override/0 = SubResource("StandardMaterial3D_t3djd")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.36687, 0)
-material_override = SubResource("StandardMaterial3D_dho4n")
-size = Vector3(100, 0.1, 100)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_djo5j")
+surface_material_override/0 = SubResource("StandardMaterial3D_3dee4")
 
 [connection signal="body_entered" from="detector" to="detector" method="_on_body_entered"]
